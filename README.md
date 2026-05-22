@@ -1,4 +1,4 @@
-# Canvas Quarter Grades
+# Canvas Quarter Grades Rework
 
 ## Intent
 
@@ -23,7 +23,7 @@ In addition, be sure to have the following variables defined in your .env file:
 
 ## Description of data and file structure
 
-Each file is denoted with a prefix of "Step#" to help the reader contextualize the order of operations throughout this procedure. As of April 30th, 2026, there are 4 files or "steps" in this repository. 
+Each file is denoted with a prefix of "Step#" to help the reader contextualize the order of operations throughout this procedure. As of May 22nd, 2026, there are 5 files or "steps" in this repository. 
 
 The sequence of code execution is summarized as follows:
 
