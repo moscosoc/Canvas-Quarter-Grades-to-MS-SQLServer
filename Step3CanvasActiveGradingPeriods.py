@@ -12,9 +12,10 @@ header = {
     "Authorization": f"Bearer {API_KEY}"
 }
 
-# Change this to Q1, Q2, Q3, or Q4
+
 TARGET_QUARTER = Step0DefineQuarter.define_quarter()
 
+# Returns all terms from Step 1, place it into a list
 
 def flatten_step1_terms():
 
@@ -28,6 +29,9 @@ def flatten_step1_terms():
 
     return terms
 
+# from the terms list made in flatten_step1_terms function, 
+# make a lookup dictionary of dictionaries containing all term ids as keys
+# mapped to their respective names and grading period group ids
 
 def build_active_quarter_term_map():
 
@@ -41,7 +45,6 @@ def build_active_quarter_term_map():
         for term in active_quarter_terms
     }
 
-
 # Makes grading period matching more flexible
 # Examples:
 # "Quarter 1" -> matches Q1
@@ -53,7 +56,10 @@ def grading_period_matches_quarter(title, target_quarter):
     if not title:
         return False
 
+    # Creates consistency "Quarter 1" --> "QUARTER1"
     normalized_title = title.upper().replace(" ", "")
+
+    # Creates consistency "q1" --> "Q1"
     normalized_target = target_quarter.upper()
 
     quarter_map = {
@@ -148,7 +154,7 @@ def combine_course_and_grading_periods():
                 "course_id": course_id,
                 "course_name": course_name,
 
-                "term_id": term_id,
+                # "term_id": term_id,
                 "term_name": term_info["term_name"],
 
                 "grading_period_group_id":
@@ -157,55 +163,20 @@ def combine_course_and_grading_periods():
                 "grading_period_id": gp["id"],
 
                 "grading_period_title":
-                    gp["title"],
-
-                "grading_period_start_date":
-                    gp["start_date"],
-
-                "grading_period_end_date":
-                    gp["end_date"]
+                    gp["title"]
             })
 
     return final_list
-
-"""
-def write_to_csv(
-    data,
-    filename="active_grading_periods.csv"
-):
-
-    if not data:
-        print("No data to write.")
-        return
-
-    fieldnames = data[0].keys()
-
-    with open(
-        filename,
-        mode="w",
-        newline="",
-        encoding="utf-8"
-    ) as csv_file:
-
-        writer = csv.DictWriter(
-            csv_file,
-            fieldnames=fieldnames
-        )
-
-        writer.writeheader()
-        writer.writerows(data)
-
-    print(f"CSV file created: {filename}")
-
-"""
 
 
 def main():
 
     return combine_course_and_grading_periods()
 
-    # write_to_csv(result)
-    # return result
-
 if __name__ == "__main__":
     main()
+
+
+
+
+
