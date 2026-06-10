@@ -4,8 +4,6 @@ import Step3CanvasActiveGradingPeriods
 from datetime import date
 import pyodbc
 
-import csv
-
 # Retrieve the URL from our Canvas instance and the api key you generated
 
 BASE_URL = os.getenv("CANVAS_URL")
@@ -50,17 +48,10 @@ def get_enrollments_for_course(course):
             yield {
                 "course_id": course_id,
                 "course_name": course["course_name"],
-                # "term_id": course["term_id"],
-                # "term_name": course["term_name"],
                 "grading_period_title": course["grading_period_title"],
-
                 "sis_user_id": user.get("sis_user_id"),
-                
-                # "type": enrollment.get("type"),
                 "sis_section_id": enrollment.get("sis_section_id"),
                 "enrollment_state" : enrollment.get("enrollment_state"),
-                
-                # "html_url": grades.get("html_url"),
                 "current_score": grades.get("current_score"),
                 "current_grade": grades.get("current_grade"),
                 "load_date": date.today()
@@ -80,6 +71,7 @@ def list_current_grade_records():
         enrollments.extend(get_enrollments_for_course(course))
 
     return enrollments
+
 
 def load_enrollments_to_sqlserver():
 
@@ -103,13 +95,13 @@ def load_enrollments_to_sqlserver():
     cursor.fast_executemany = True
 
     truncate_sql = """
-        TRUNCATE TABLE dbo.canvas_test
+        TRUNCATE TABLE dbo.canvas_quarter_grades
     
     """
 
     insert_sql = """
 
-        INSERT INTO dbo.canvas_test (
+        INSERT INTO dbo.canvas_quarter_grades (
                 course_id
             ,   course_name
             ,   grading_period_title
@@ -145,7 +137,7 @@ def load_enrollments_to_sqlserver():
         cursor.execute(truncate_sql)
         cursor.executemany(insert_sql, rows)
         conn.commit()
-        print(f"Inserted {len(rows)} rows into dbo.canvas_in_progress_grades")
+        print(f"Inserted {len(rows)} rows into dbo.canvas_quarter_grades")
     else:
         print("No enrollments to load.")
 
@@ -162,128 +154,3 @@ if __name__ == "__main__":
     print("Running Python File!")
     main()
 
-
-
-'''
-
-def write_to_csv(
-    data,
-    filename="active_enrollments.csv"
-):
-
-    if not data:
-        print("No data to write.")
-        return
-
-    fieldnames = data[0].keys()
-
-    with open(
-        filename,
-        mode="w",
-        newline="",
-        encoding="utf-8"
-    ) as csv_file:
-
-        writer = csv.DictWriter(
-            csv_file,
-            fieldnames=fieldnames
-        )
-
-        writer.writeheader()
-        writer.writerows(data)
-
-    print(f"CSV file created: {filename}")
-
-def main():
-
-    results =  list_current_grade_records()
-
-    write_to_csv(results)
-
-if __name__ == "__main__":
-    main()
-
-
-
-
-def load_enrollments_to_sqlserver():
-    server = os.getenv("SQL_SERVER")
-    database = os.getenv("SQL_DATABASE")
-    username = os.getenv("SQL_USERNAME")
-    password = os.getenv("SQL_PASSWORD")
-
-    conn_str = (
-        "DRIVER={ODBC Driver 18 for SQL Server};"
-        f"SERVER={server};"
-        f"DATABASE={database};"
-        f"UID={username};"
-        f"PWD={password};"
-        "Encrypt=yes;"
-        "TrustServerCertificate=yes"
-    )
-
-    conn = pyodbc.connect(conn_str)
-    cursor = conn.cursor()
-    cursor.fast_executemany = True
-
-    truncate_sql = """
-        TRUNCATE TABLE dbo.canvas_in_progress_grades
-    
-    """
-
-    insert_sql = """
-
-        INSERT INTO dbo.canvas_in_progress_grades (
-            type,
-            sis_course_id,
-            course_id,
-            user_id,
-            sis_section_id,
-            html_url,
-            current_score,
-            current_grade,
-            name,
-            sis_user_id,
-            load_date
-         )
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """
-
-
-    enrollments = list_current_grade_records()
-
-    rows = [
-        (
-            e.get("type"),
-            e.get("sis_course_id"),
-            e.get("course_id"),
-            e.get("user_id"),
-            e.get("sis_section_id"),
-            e.get("html_url"),
-            e.get("current_score"),
-            e.get("current_grade"),
-            e.get("name"),
-            e.get("sis_user_id"),
-            e.get("load_date")
-        )
-        for e in enrollments
-    ]
-
-    if rows:
-        cursor.execute(truncate_sql)
-        cursor.executemany(insert_sql, rows)
-        conn.commit()
-        print(f"Inserted {len(rows)} rows into dbo.canvas_in_progress_grades")
-    else:
-        print("No enrollments to load.")
-
-    cursor.close()
-    conn.close()
-
-
-if __name__ == "__main__":
-   
-    print("Running Python File!")
-    load_enrollments_to_sqlserver()
-
-'''
