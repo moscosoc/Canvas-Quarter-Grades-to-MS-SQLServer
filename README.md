@@ -6,7 +6,7 @@ These series of scripts were created with the goal of migrating the in progress 
 
 ## Prerequisites
 
-Before running the file, be sure to install the following libraries in your environment:
+Before running the file, be sure to install the following external libraries in your environment:
 
   1. requests
   2. dotenv
@@ -27,7 +27,8 @@ Each file is denoted with a prefix of "Step#" to help the reader contextualize t
 
 The sequence of code execution is summarized as follows:
 
-  1. For every term active within a quarter (i.e "Q1), return the term data.
-  2. Using the term data from Step 1, use it to return the course data in Step 2.
-  3. From the course data returned in Step 2, use it to find the grading period data, merge the course data from step 2 and the grading period data from the current step (step 3).
-  4. Finally, once the course data and grading period data is merged, use it to find the current quarter scores and grades for every student in those courses. Import the     final data set into the canvas_in_progress_grades table. 
+  1. Define the quarter to pull data from (Q1, Q2, etc.)
+  2. For every term active within a defined quarter, return the term data.
+  3. Using the term data from Step 2, use it to return the course data in Step 3.
+  4. From the course data returned in Step 3, use it to find the grading period data, merge the course data from step 3 and the grading period data from the current step (step 4).
+  5. Finally, once the course data and grading period data is merged, use it to find the current quarter scores and grades for every student in those courses. Import the     final data set into the canvas_quarter_grades table. 
