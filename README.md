@@ -1,4 +1,4 @@
-# Canvas Quarter Grades Import to Infinite Campus Gradebook
+# Canvas Quarter Grades Import to MS SQL Server database
 
 ## Intent
 
