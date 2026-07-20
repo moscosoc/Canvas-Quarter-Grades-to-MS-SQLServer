@@ -1,4 +1,4 @@
-# Canvas Quarter Grades Rework
+# Canvas Quarter Grades Import to Infinite Campus Gradebook
 
 ## Intent
 
