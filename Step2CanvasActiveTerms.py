@@ -93,10 +93,7 @@ def term_starts_in_window(term: dict, window_start: datetime) -> bool:
     start = parse_canvas_dt(term.get("start_at"))
     end = parse_canvas_dt(term.get("end_at"))
     
-    #today = datetime.now(timezone.utc) 
-
-    today_str = "2026-06-15 17:02:39.680145+00:00"
-    today= datetime.fromisoformat(today_str)
+    today = datetime.now(timezone.utc) 
 
     if start is None and end < today:
         return False
@@ -113,10 +110,7 @@ def is_real_grading_term(t: dict) -> bool:
 
 def filter_terms(term_list):
 
-    #today = datetime.today()
-
-    today_str = "2026-06-15 17:02:39.680145+00:00"
-    today= datetime.fromisoformat(today_str)
+    today = datetime.today()
 
     if today.month >= 7:
         school_year = today.year
