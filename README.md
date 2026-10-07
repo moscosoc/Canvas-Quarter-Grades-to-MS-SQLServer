@@ -24,7 +24,9 @@ Each file is denoted with a prefix of "Step#" to help the reader contextualize t
 
 The sequence of code execution is summarized as follows:
 
-
-  1. For every term active within a defined quarter, return the term data.
-  2. Using the term data from Step 1, use it to return the course ids.
-  3. From the course data returned in Step 2, use it to send a POST command for every course. This will disable the "Hide grade      distribution graphs from students" checkbox. 
+  1. Define the quarter to pull data from (Q1, Q2, etc.)
+  2. For every term active within a defined quarter, return the term data.
+  3. Using the term data from Step 2, use it to return the course data in Step 3.
+  4. From the course data returned in Step 3, use it to find the grading period data, merge the course data from step 3 and the grading period data from the current step (step 4).
+  5. Once the course data and grading period data is merged, use it to find the current quarter scores and grades for every student in those courses. Import the final data set into the canvas_quarter_grades table. 
+  6. Finally, an email will be sent out to all parties regarding the status of the most recent run of the job. 
